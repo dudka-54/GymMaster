@@ -89,7 +89,7 @@ public class TimetableTest {
     }
 
     @Test
-    public  void testGetCountByCoachesAdultGroup() {
+    public void testGetCountByCoachesAdultGroup() {
         Timetable timetable = new Timetable();
         Coach coach = new Coach("Васильев", "Николай", "Сергеевич");
         Group groupAdult = new Group("Акробатика для взрослых", Age.ADULT, 90);
@@ -102,7 +102,7 @@ public class TimetableTest {
     }
 
     @Test
-    public  void testGetCountByCoachesChildGroupMoreOne() {
+    public void testGetCountByCoachesChildGroupMoreOne() {
         Timetable timetable = new Timetable();
         Coach coach = new Coach("Васильев", "Николай", "Сергеевич");
 
@@ -114,7 +114,8 @@ public class TimetableTest {
         TrainingSession saturdayChildTrainingSession = new TrainingSession(groupChild, coach,
                 DayOfWeek.SATURDAY, new TimeOfDay(10, 0));
 
-;        timetable.addNewTrainingSession(mondayChildTrainingSession);
+        ;
+        timetable.addNewTrainingSession(mondayChildTrainingSession);
         timetable.addNewTrainingSession(thursdayChildTrainingSession);
         timetable.addNewTrainingSession(saturdayChildTrainingSession);
 
@@ -124,7 +125,7 @@ public class TimetableTest {
     }
 
     @Test
-    public  void testGetCountByCoaches() {
+    public void testGetCountByCoaches() {
         Timetable timetable = new Timetable();
         Coach coach1 = new Coach("Сергеев", "Сергей", "Сергеевич");
         Group groupAdult = new Group("Акробатика для взрослых", Age.ADULT, 90);
@@ -158,5 +159,43 @@ public class TimetableTest {
         int actual2 = 3;
         Assertions.assertEquals(actual2, expected2);
 
+    }
+
+    @Test
+    public void testGetCountByCoachesBoundaryValue() {
+        Timetable timetable = new Timetable();
+        Coach coach1 = new Coach("Сергеев", "Сергей", "Сергеевич");
+        Group groupAdult = new Group("Акробатика для взрослых", Age.ADULT, 90);
+        TrainingSession thursdayAdultTrainingSession = new TrainingSession(groupAdult, coach1,
+                DayOfWeek.THURSDAY, new TimeOfDay(20, 0));
+        timetable.addNewTrainingSession(thursdayAdultTrainingSession);
+
+        Coach coach2 = new Coach("Васильев", "Николай", "Сергеевич");
+
+        Group groupChild = new Group("Акробатика для детей", Age.CHILD, 60);
+        TrainingSession mondayChildTrainingSession = new TrainingSession(groupChild, coach2,
+                DayOfWeek.MONDAY, new TimeOfDay(13, 0));
+        timetable.addNewTrainingSession(mondayChildTrainingSession);
+
+        Coach coach3 = new Coach("Андреев","Андрей", "Андреевич");
+        Group groupAdult2 = new Group("Литрбол", Age.ADULT,60);
+        TrainingSession trainingSession3 = new TrainingSession(groupAdult2, coach3,DayOfWeek.FRIDAY,new TimeOfDay(21,0));
+        TrainingSession trainingSession4 = new TrainingSession(groupAdult2, coach3, DayOfWeek.SATURDAY,new TimeOfDay(12,0));
+        timetable.addNewTrainingSession(trainingSession3);
+        timetable.addNewTrainingSession(trainingSession4);
+
+        Map<Coach, Integer> coachCountMap = timetable.getCountByCoaches();
+        List<Integer> values = new ArrayList<>(coachCountMap.values());
+
+        Assertions.assertEquals(2,values.getFirst());
+        Assertions.assertEquals(1,timetable.getCountByCoaches().get(coach2));
+        Assertions.assertEquals(1,timetable.getCountByCoaches().get(coach1));
+        //одновременно тест сортировки по убыванию и граничащий
+    }
+
+    @Test
+    public void testGetCountByCoachesNullList() {
+        Timetable timetable = new Timetable();
+        Assertions.assertTrue(timetable.getCountByCoaches().isEmpty());
     }
 }

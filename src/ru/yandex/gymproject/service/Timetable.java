@@ -38,15 +38,6 @@ public class Timetable {
     }
 
 
-public TrainingSession getOnlyOneTrainingSession(List<TrainingSession> trainingSessions){
-        if(trainingSessions.isEmpty()){
-            throw new IllegalArgumentException("Список пуст");
-        }
-        if(trainingSessions.size() > 1){
-            throw new IllegalArgumentException("В списке больше одной тренировки: " + trainingSessions.size());        } else {
-            return trainingSessions.getFirst();
-        }
-}
     public List<TrainingSession> getTrainingSessionsForDay(DayOfWeek dayOfWeek) {
         return flatTimetable.getOrDefault(dayOfWeek, Collections.emptyList());
 

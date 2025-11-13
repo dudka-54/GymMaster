@@ -4,7 +4,7 @@ import ru.yandex.gymproject.util.TimeOfDay;
 
 import java.util.Objects;
 
-public class TrainingSession implements Comparable {
+public class TrainingSession implements Comparable<TrainingSession> {
     private Group group;
     private Coach coach;
     private DayOfWeek dayOfWeek;
@@ -14,7 +14,10 @@ public class TrainingSession implements Comparable {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         TrainingSession that = (TrainingSession) o;
-        return Objects.equals(group, that.group) && Objects.equals(coach, that.coach) && dayOfWeek == that.dayOfWeek && Objects.equals(timeOfDay, that.timeOfDay);
+        return Objects.equals(group, that.group) &&
+                Objects.equals(coach, that.coach) &&
+                dayOfWeek == that.dayOfWeek &&
+                Objects.equals(timeOfDay, that.timeOfDay);
     }
 
     @Override
@@ -57,16 +60,14 @@ public class TrainingSession implements Comparable {
     }
 
     @Override
-    public int compareTo(Object o) {
-        if(o == null){
+    public int compareTo(TrainingSession o) {
+        if(o == null) {
             return -1;
         }
-        int dayCompare = this.dayOfWeek.compareTo(((TrainingSession)o).dayOfWeek);
-        if(dayCompare != 0){
+        int dayCompare = this.dayOfWeek.compareTo(o.dayOfWeek);
+        if(dayCompare != 0) {
             return dayCompare;
         }
-        return this.dayOfWeek.compareTo(((TrainingSession)o).dayOfWeek);
-
-
+        return this.timeOfDay.compareTo(o.timeOfDay);
     }
     }
